@@ -1,0 +1,7 @@
+.DS_Store
+
+# Ansible
+*.retry
+ansible.cfg
+
+files/artifactory.lic

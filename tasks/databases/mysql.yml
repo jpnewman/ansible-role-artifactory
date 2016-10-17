@@ -1,0 +1,22 @@
+---
+
+- name: Find out the master log file name and position
+  command: >
+    /usr/bin/mysql -u{{ mysql_root_username }} -p{{ mysql_root_password }} -s -r -e "SHOW DATABASES LIKE '{{ artifactory_database.database }}';"
+  register: databases
+
+- name: Setup MySQL Database
+  mysql_db:
+    state: import
+    name: all
+    target: "{{ artifactory_home }}/misc/db/createdb/createdb_mysql.sql"
+  when: "'{{ artifactory_database.database }}' not in '{{ databases.stdout }}'"
+
+- name: Configure Storage
+  template:
+    src: storage.properties.j2
+    dest: "{{ artifactory_home }}/etc/storage.properties"
+    owner: artifactory
+    group: artifactory
+    mode: 0664
+  notify: restart artifactory
