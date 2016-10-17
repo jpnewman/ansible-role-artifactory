@@ -1,5 +1,6 @@
 # jpnewman.artifactory
 
+[![Ansible Role](https://img.shields.io/ansible/role/12824.svg?maxAge=2592000)](https://galaxy.ansible.com/jpnewman/apache/)
 [![Build Status](https://travis-ci.org/jpnewman/ansible-role-artifactory.svg?branch=master)](https://travis-ci.org/jpnewman/ansible-role-artifactory)
 
 This is an Ansible role to install artifactory.
