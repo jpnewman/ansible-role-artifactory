@@ -55,7 +55,6 @@
     src: "/tmp/{{ artifactory_database_file_title }}.tar.gz"
     dest: /tmp
     creates: "/tmp/{{ artifactory_database_file_title }}/"
-    copy: no
     remote_src: yes
   when: artifactory_database_jdbc_url is defined and not jdbc_installed.stat.exists
 
