@@ -18,21 +18,13 @@
     owner: artifactory
     group: artifactory
     mode: 0644
-  when: "'{{ artifactory_type | lower }}' == 'pro'"
-  notify: restart artifactory
-
-- name: Add logo file
-  copy:
-    src: "{{ artifactory_logo }}"
-    dest: "{{ artifactory_home }}/etc/ui/logo"
-    owner: artifactory
-    group: artifactory
-    mode: 0644
-  when: artifactory_logo is defined
-  notify: restart artifactory
+  when: artifactory_type | lower == 'pro' and artifactory_license_file is defined and artifactory_license_file | default(None) != None
+  notify:
+    - restart artifactory
+    - restart apache
 
 - include: databases/mysql.yml
-  when: "'{{ artifactory_database.type | lower }}' == 'mysql'"
+  when: artifactory_database.type | lower == 'mysql'
 
 # artifactory_jmx_enable
 - name: Artifactory JMX Enable
@@ -42,7 +34,9 @@
     line: "{{ artifactory_jmx_java_options }}"
     state: present
   when: artifactory_jmx_enable is defined
-  notify: restart artifactory
+  notify:
+    - restart artifactory
+    - restart apache
 
 - name: Create jmxterm Directory
   file:

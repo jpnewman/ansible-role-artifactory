@@ -2,19 +2,16 @@
 # defaults file for jpnewman.artifactory
 
 # artifactory_version: 4.13.0 # lastest | <Version_Number>
-artifactory_type: pro # pro | oss
+artifactory_type: oss # pro | oss
 
 artifactory_home: /var/opt/jfrog/artifactory # /opt/jfrog/artifactory
 
 artifactory_default_file: /etc/opt/jfrog/artifactory/default
 
-artifactory_license_file: artifactory.lic
+artifactory_license_file: # artifactory.lic
 artifactory_license_path: "/etc/opt/jfrog/artifactory/artifactory.lic"
 
 artifactory_service_name: artifactory
-
-# Logo
-# artifactory_logo: logo.png
 
 # Derby Database
 # artifactory_database:

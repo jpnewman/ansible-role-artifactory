@@ -12,7 +12,7 @@
     state: present
     update_cache: yes
     filename: jfrog-artifactory-pro
-  when: "'{{ artifactory_type | lower }}' == 'pro'"
+  when: artifactory_type | lower == 'pro'
 
 - name: Add Artifactory OSS apt repo
   apt_repository:
@@ -20,13 +20,15 @@
     state: present
     update_cache: yes
     filename: jfrog-artifactory-oss
-  when: "'{{ artifactory_type | lower }}' == 'oss'"
+  when: artifactory_type | lower == 'oss'
 
 - name: Install Artifactory
   apt:
     name: "jfrog-artifactory-{{ artifactory_type | lower }}"
     state: present
-  notify: restart artifactory
+  notify:
+    - restart artifactory
+    - restart apache
 
 # derby-tools
 # Currently only derby-tools 10.10.1.1-1 and not 10.11 is available via debian repositories
@@ -35,7 +37,7 @@
     name: derby-tools
     state: present
     update_cache: yes
-  when: "'{{ artifactory_database.type | lower }}' == 'derby' and {{ artifactory_derby_tools_install }} and artifactory_derby_tools_url is not defined"
+  when: artifactory_database.type | lower == 'derby' and artifactory_derby_tools_install and artifactory_derby_tools_url is not defined
 
 # JDBC
 - name: Check if JDBC is already installed
@@ -61,4 +63,6 @@
 - name: Move JDBC Connector for MySQL to Tomcat lib folder
   command: "cp /tmp/{{ artifactory_database_file_title }}/{{ artifactory_database_file_title }}-bin.jar {{ artifactory_home }}/tomcat/lib"
   when: artifactory_database_jdbc_url is defined and not jdbc_installed.stat.exists
-  notify: restart artifactory
+  notify:
+    - restart artifactory
+    - restart apache

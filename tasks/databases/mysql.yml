@@ -10,7 +10,7 @@
     state: import
     name: all
     target: "{{ artifactory_home }}/misc/db/createdb/createdb_mysql.sql"
-  when: "'{{ artifactory_database.database }}' not in '{{ databases.stdout }}'"
+  when: artifactory_database.database not in databases.stdout
 
 - name: Configure Storage
   template:
@@ -19,4 +19,6 @@
     owner: artifactory
     group: artifactory
     mode: 0664
-  notify: restart artifactory
+  notify:
+    - restart artifactory
+    - restart apache

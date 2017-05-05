@@ -14,14 +14,12 @@ Ansible 2.x
 |Variable|Description|Default|
 |---|---|:--|
 |**defaults jpnewman.artifactory**|||
-|```artifactory_type```||pro / oss|
+|```artifactory_type```|oss|pro / oss|
 |```artifactory_home```||/var/opt/jfrog/artifactory|
 |```artifactory_default_file```||/etc/opt/jfrog/artifactory/default|
-|```artifactory_license_file```||artifactory.lic|
+|```artifactory_license_file```|||
 |```artifactory_license_path```||"/etc/opt/jfrog/artifactory/artifactory.lic"|
 |```artifactory_service_name```||artifactory|
-|**Logo**|||
-|```artifactory_logo```||logo.png|
 |**Derby Database / Derby Tools**|||
 |```artifactory_derby_tools_install```||False|
 |```artifactory_derby_tools_version```||10.12.1.1|

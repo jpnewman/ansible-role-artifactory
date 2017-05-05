@@ -5,17 +5,19 @@
     name: artifactory-pro-rpms
     description: Artifactory Pro
     baseurl: https://bintray.com/jfrog/artifactory-pro-rpms/rpm
-  when: "'{{ artifactory_type | lower }}' == 'pro'"
+  when: artifactory_type | lower == 'pro'
 
 - name: Add Artifactory OSS RPM
   yum_repository:
     name: artifactory-rpms
     description: Artifactory OSS
     baseurl: https://bintray.com/jfrog/artifactory-rpms/rpm
-  when: "'{{ artifactory_type | lower }}' == 'oss'"
+  when: artifactory_type | lower == 'oss'
 
 - name: Install Artifactory
   yum:
     name: "jfrog-artifactory-{{ artifactory_type | lower }}"
     state: present
-  notify: restart artifactory
+  notify:
+    - restart artifactory
+    - restart apache
