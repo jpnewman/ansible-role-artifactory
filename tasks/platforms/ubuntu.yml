@@ -42,8 +42,10 @@
 # JDBC
 - name: Check if JDBC is already installed
   stat:
-    path: "{{ artifactory_database_file_title }}-bin.jar"
+    path: "{{ artifactory_home }}/tomcat/lib/{{ artifactory_database_file_title }}-bin.jar"
   register: jdbc_installed
+  check_mode: no
+  changed_when: False
 
 - name: Download JDBC Connector for MySQL
   get_url:

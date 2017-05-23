@@ -4,6 +4,8 @@
   command: >
     /usr/bin/mysql -u{{ mysql_root_username }} -p{{ mysql_root_password }} -s -r -e "SHOW DATABASES LIKE '{{ artifactory_database.database }}';"
   register: databases
+  check_mode: no
+  changed_when: False
 
 - name: Setup MySQL Database
   mysql_db:
