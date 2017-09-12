@@ -1,0 +1,8 @@
+---
+
+- name: Add apt transport for https
+  apt:
+    name: apt-transport-https
+    state: present
+
+- include: ubuntu.yml
