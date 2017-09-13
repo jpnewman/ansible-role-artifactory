@@ -42,7 +42,7 @@ Ansible 2.x
 |```artifactory_jmx_enable```||true|
 |```artifactory_jmx_java_options```||'export JAVA\_OPTIONS="$JAVA\_OPTIONS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.rmi.port=9011 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname={{ ansible_hostname }}"'|
 |```artifactory_jmx_jmxterm_install```||true|
-|```artifactory_jmx_jmxterm_url```||http://downloads.sourceforge.net/project/cyclops-group/jmxterm/1.0-alpha-4/jmxterm-1.0-alpha-4-uber.jar|
+|```artifactory_jmx_jmxterm_url```||https://downloads.sourceforge.net/project/cyclops-group/jmxterm/1.0.0/jmxterm-1.0.0-uber.jar|
 
 ### ```artifactory_database_object_derby```
 
