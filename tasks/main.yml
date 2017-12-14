@@ -49,9 +49,7 @@
     url: "{{ artifactory_jmx_jmxterm_url }}"
     dest: "/opt/jmxterm/jmxterm.jar"
     mode: 0644
-    timeout: 45
+    timeout: "{{ artifactory_jmx_jmxterm_download_timeout }}"
   retries: 3
   delay: 10
   when: artifactory_jmx_jmxterm_install is defined and artifactory_jmx_jmxterm_install
-
-# when: artifactory_run_as_service

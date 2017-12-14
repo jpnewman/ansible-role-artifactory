@@ -63,7 +63,7 @@
   when: artifactory_database_jdbc_url is defined and not jdbc_installed.stat.exists
 
 - name: Move JDBC Connector for MySQL to Tomcat lib folder
-  command: "cp /tmp/{{ artifactory_database_file_title }}/{{ artifactory_database_file_title }}-bin.jar {{ artifactory_home }}/tomcat/lib"
+  command: "install -m 0644 /tmp/{{ artifactory_database_file_title }}/{{ artifactory_database_file_title }}-bin.jar {{ artifactory_home }}/tomcat/lib"
   when: artifactory_database_jdbc_url is defined and not jdbc_installed.stat.exists
   notify:
     - restart artifactory

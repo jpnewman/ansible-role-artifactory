@@ -1,26 +1,65 @@
 ---
 
-- name: Find out the master log file name and position
+- name: Check Artifactory Database
   command: >
     /usr/bin/mysql -u{{ mysql_root_username }} -p{{ mysql_root_password }} -s -r -e "SHOW DATABASES LIKE '{{ artifactory_database.database }}';"
   register: databases
   check_mode: no
   changed_when: False
 
-- name: Setup MySQL Database
+- name: Create Artifactory Database Table
   mysql_db:
-    state: import
-    name: all
-    target: "{{ artifactory_home }}/misc/db/createdb/createdb_mysql.sql"
+    name: "{{ artifactory_database.database }}"
+    encoding: "utf8"
+    collation: "utf8_bin"
+    state: present
   when: artifactory_database.database not in databases.stdout
 
-- name: Configure Storage
+- name: Create Artifactory Database User
+  mysql_user:
+    name: "{{ artifactory_database.username }}"
+    password: "{{ artifactory_database.password }}"
+    host: "localhost"
+    priv: "{{ artifactory_database.database }}.*:ALL,GRANT"
+
+- name: Stat Artifactory DB properties files 
+  stat: 
+    path: "{{ artifactory_home }}/etc/db.properties"
+  register: artifactory_db_properties
+
+# Artifactory encrypts passwords in config files so use the API to decrypt them.
+- name: Check Artifactory API Health
+  uri:
+    url: "{{ artifactory_api_url }}/system/ping"
+    return_content: yes
+  register: artifactory_api_ping
+  when: artifactory_api_url is defined
+  check_mode: no
+  ignore_errors: True
+
+- name: Decrypt Artifactory via API
+  uri:
+    url: "{{ artifactory_api_url }}/system/decrypt"
+    method: POST
+    user: "{{ artifactory_api_username }}"
+    password: "{{ artifactory_api_password }}"
+  when: artifactory_api_username is defined and artifactory_api_password is defined and artifactory_api_ping.content == 'OK' and artifactory_db_properties.stat.exists
+
+- name: Configure Artifactory Database Storage
   template:
-    src: storage.properties.j2
-    dest: "{{ artifactory_home }}/etc/storage.properties"
+    src: db.properties.j2
+    dest: "{{ artifactory_home }}/etc/db.properties"
     owner: artifactory
     group: artifactory
-    mode: 0664
+    mode: 0600
   notify:
     - restart artifactory
     - restart apache
+
+- name: Encrypt Artifactory via API
+  uri:
+    url: "{{ artifactory_api_url }}/system/encrypt"
+    method: POST
+    user: "{{ artifactory_api_username }}"
+    password: "{{ artifactory_api_password }}"
+  when: artifactory_api_username is defined and artifactory_api_password is defined and artifactory_api_ping.content == 'OK'

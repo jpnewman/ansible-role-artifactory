@@ -27,7 +27,7 @@ Ansible 2.x
 |**MySQL**|||
 |```artifactory_database```||```artifactory_database_object_derby``` / ```artifactory_database_object```|
 |**JDBC Connector-J**|||
-|```artifactory_database_file_title```||mysql-connector-java-5.1.40|
+|```artifactory_database_file_title```||mysql-connector-java-5.1.44|
 |```artifactory_database_jdbc_url```||"http://dev.mysql.com/get/Downloads/Connector-J/{{ artifactory\_database\_file\_title }}.tar.gz"|
 |**geerlingguy.mysql**|||
 |```mysql_innodb_file_per_table```||"1"|
@@ -42,9 +42,13 @@ Ansible 2.x
 |```artifactory_jmx_enable```||true|
 |```artifactory_jmx_java_options```||'export JAVA\_OPTIONS="$JAVA\_OPTIONS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.rmi.port=9011 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname={{ ansible_hostname }}"'|
 |```artifactory_jmx_jmxterm_install```||true|
-|```artifactory_jmx_jmxterm_url```||https://downloads.sourceforge.net/project/cyclops-group/jmxterm/1.0.0/jmxterm-1.0.0-uber.jar|
+|```artifactory_jmx_jmxterm_url```||http://downloads.sourceforge.net/project/cyclops-group/jmxterm/1.0-alpha-4/jmxterm-1.0-alpha-4-uber.jar|
+|**Encryption**|||
+|```artifactory_api_username```|Artifactory API username||
+|```artifactory_api_password```|Artifactory API password||
+|```artifactory_api_url```|Artifactory API URL||
 
-### ```artifactory_database_object_derby```
+## ```artifactory_database_object_derby```
 
 |Variable|Description|Default|
 |---|---|:--|
@@ -52,7 +56,7 @@ Ansible 2.x
 |```url```||jdbc:derby:{db.home};create=true|
 |```driver```||org.apache.derby.jdbc.EmbeddedDriver|
 
-### ```artifactory_database_object_mysql```
+## ```artifactory_database_object_mysql```
 
 |Variable|Description|Default|
 |---|---|:--|
@@ -66,6 +70,22 @@ Ansible 2.x
 ## NOTES
 
 Review ```TODO.md``` for information on outstanding items, like ```nginx``` reverse proxy support.
+
+## Encryption
+
+Artifactory encrypts passwords in configuration files.
+
+If the following variables are defined the password will be decrypted when the templates are compared: -
+
+|Variable|Description|
+|---|---|
+|```artifactory_api_username```|Artifactory API username|
+|```artifactory_api_password```|Artifactory API password|
+|```artifactory_api_url```|Artifactory API URL|
+
+These are used for the API ```/api/system/decrypt``` and ```/api/system/encrypt``` commands and help make the role idempotent.
+
+<https://www.jfrog.com/confluence/display/RTF/Artifactory+REST+API#ArtifactoryRESTAPI-ActivateMasterKeyEncryption>
 
 ## Tuning MySQL
 
