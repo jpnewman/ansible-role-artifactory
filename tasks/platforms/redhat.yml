@@ -4,14 +4,14 @@
   yum_repository:
     name: artifactory-pro-rpms
     description: Artifactory Pro
-    baseurl: https://bintray.com/jfrog/artifactory-pro-rpms/rpm
+    baseurl: https://jfrog.bintray.com/artifactory-pro-rpms
   when: artifactory_type | lower == 'pro'
 
 - name: Add Artifactory OSS RPM
   yum_repository:
     name: artifactory-rpms
     description: Artifactory OSS
-    baseurl: https://bintray.com/jfrog/artifactory-rpms/rpm
+    baseurl: https://jfrog.bintray.com/artifactory-rpms
   when: artifactory_type | lower == 'oss'
 
 - name: Install Artifactory
