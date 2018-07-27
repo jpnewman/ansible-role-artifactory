@@ -2,25 +2,25 @@
 # defaults file for jpnewman.artifactory
 
 # artifactory_version: 4.13.0 # lastest | <Version_Number>
-artifactory_type: oss # pro | oss
+artifactory_type: oss  # pro | oss
 
-artifactory_home: /var/opt/jfrog/artifactory # /opt/jfrog/artifactory
+artifactory_home: /var/opt/jfrog/artifactory  # /opt/jfrog/artifactory
 
 artifactory_default_file: /etc/opt/jfrog/artifactory/default
 
-artifactory_license_file: # artifactory.lic
+artifactory_license_file:  # artifactory.lic
 artifactory_license_path: "/etc/opt/jfrog/artifactory/artifactory.lic"
 
 artifactory_service_name: artifactory
 
 # Derby Database
 artifactory_database:
-  type: Derby # Derby | MySQL | PostgreSQL
+  type: Derby  # Derby | MySQL | PostgreSQL
   url: jdbc:derby:{db.home};create=true
   driver: org.apache.derby.jdbc.EmbeddedDriver
 
 # Derby Tools
-artifactory_derby_tools_install: False
+artifactory_derby_tools_install: false
 artifactory_derby_tools_version: 10.12.1.1
 artifactory_derby_tools_url: "http://apache.mirror.anlx.net//db/derby/db-derby-{{ artifactory_derby_tools_version }}/db-derby-{{ artifactory_derby_tools_version }}-bin.zip"
 
@@ -28,16 +28,18 @@ artifactory_derby_tools_url: "http://apache.mirror.anlx.net//db/derby/db-derby-{
 # artifactory_database:
 #   # config_file: "{{ artifactory_home }}/misc/db/mysql.properties"
 #   type: mysql
+#   host: localhost
 #   driver: com.mysql.jdbc.Driver
-#   url: 'jdbc:mysql://localhost:3306/artdb?characterEncoding=UTF-8&elideSetAutoCommits=true'
+#   url: 'jdbc:mysql://{{ artifactory_database.host }}:3306/{{ artifactory_database.database }}?characterEncoding=UTF-8&elideSetAutoCommits=true'
 #   username: artifactory
 #   password: password
 #   database: artdb
 
 # JDBC Connector-J
 # http://dev.mysql.com/downloads/connector/j/
-artifactory_database_file_title: mysql-connector-java-5.1.44
-artifactory_database_jdbc_url: "http://dev.mysql.com/get/Downloads/Connector-J/{{ artifactory_database_file_title }}.tar.gz"
+artifactory_database_file_title: mysql-connector-java-8.0.11
+artifactory_database_jdbc_url: "https://dev.mysql.com/get/Downloads/Connector-J/{{ artifactory_database_file_title }}.tar.gz"
+artifactory_database_filename: "{{ artifactory_database_file_title }}.jar"
 
 # geerlingguy.mysql
 mysql_innodb_file_per_table: "1"
@@ -50,7 +52,7 @@ mysql_innodb_log_file_size: 256M
 mysql_innodb_log_buffer_size: 4M
 
 # Reverse Proxy
-artifactory_proxy: apache # apache | nginx
+artifactory_proxy: apache  # apache | nginx
 
 # JMX
 artifactory_jmx_enable: true
@@ -59,7 +61,7 @@ artifactory_jmx_enable: true
 artifactory_jmx_java_options: 'export JAVA_OPTIONS="$JAVA_OPTIONS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.rmi.port=9011 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname={{ ansible_default_ipv4.address }}"'
 
 artifactory_jmx_jmxterm_install: true
-artifactory_jmx_jmxterm_url: http://downloads.sourceforge.net/project/cyclops-group/jmxterm/1.0-alpha-4/jmxterm-1.0-alpha-4-uber.jar
+artifactory_jmx_jmxterm_url: https://downloads.sourceforge.net/project/cyclops-group/jmxterm/1.0.0/jmxterm-1.0.0-uber.jar
 artifactory_jmx_jmxterm_download_timeout: 60
 
 # API

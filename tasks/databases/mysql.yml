@@ -4,8 +4,8 @@
   command: >
     /usr/bin/mysql -u{{ mysql_root_username }} -p{{ mysql_root_password }} -s -r -e "SHOW DATABASES LIKE '{{ artifactory_database.database }}';"
   register: databases
-  check_mode: no
-  changed_when: False
+  check_mode: false
+  changed_when: false
 
 - name: Create Artifactory Database Table
   mysql_db:
@@ -22,8 +22,8 @@
     host: "localhost"
     priv: "{{ artifactory_database.database }}.*:ALL,GRANT"
 
-- name: Stat Artifactory DB properties files 
-  stat: 
+- name: Stat Artifactory DB properties files
+  stat:
     path: "{{ artifactory_home }}/etc/db.properties"
   register: artifactory_db_properties
 
@@ -31,11 +31,11 @@
 - name: Check Artifactory API Health
   uri:
     url: "{{ artifactory_api_url }}/system/ping"
-    return_content: yes
+    return_content: true
   register: artifactory_api_ping
   when: artifactory_api_url is defined
-  check_mode: no
-  ignore_errors: True
+  check_mode: false
+  ignore_errors: true
 
 - name: Decrypt Artifactory via API
   uri:

@@ -1,4 +1,3 @@
-
 ---
 
 - name: Add Artifactory apt repo key
@@ -10,7 +9,7 @@
   apt_repository:
     repo: 'deb https://jfrog.bintray.com/artifactory-pro-debs {{ ansible_distribution_release }} main'
     state: present
-    update_cache: yes
+    update_cache: true
     filename: jfrog-artifactory-pro
   when: artifactory_type | lower == 'pro'
 
@@ -18,7 +17,7 @@
   apt_repository:
     repo: 'deb https://jfrog.bintray.com/artifactory-debs {{ ansible_distribution_release }} main'
     state: present
-    update_cache: yes
+    update_cache: true
     filename: jfrog-artifactory-oss
   when: artifactory_type | lower == 'oss'
 
@@ -36,16 +35,16 @@
   apt:
     name: derby-tools
     state: present
-    update_cache: yes
+    update_cache: true
   when: artifactory_database.type | lower == 'derby' and artifactory_derby_tools_install and artifactory_derby_tools_url is not defined
 
 # JDBC
 - name: Check if JDBC is already installed
   stat:
-    path: "{{ artifactory_home }}/tomcat/lib/{{ artifactory_database_file_title }}-bin.jar"
+    path: "{{ artifactory_home }}/tomcat/lib/{{ artifactory_database_filename }}"
   register: jdbc_installed
-  check_mode: no
-  changed_when: False
+  check_mode: false
+  changed_when: false
 
 - name: Download JDBC Connector for MySQL
   get_url:
@@ -59,11 +58,11 @@
     src: "/tmp/{{ artifactory_database_file_title }}.tar.gz"
     dest: /tmp
     creates: "/tmp/{{ artifactory_database_file_title }}/"
-    remote_src: yes
+    remote_src: true
   when: artifactory_database_jdbc_url is defined and not jdbc_installed.stat.exists
 
 - name: Move JDBC Connector for MySQL to Tomcat lib folder
-  command: "install -m 0644 /tmp/{{ artifactory_database_file_title }}/{{ artifactory_database_file_title }}-bin.jar {{ artifactory_home }}/tomcat/lib"
+  command: "install -m 0644 /tmp/{{ artifactory_database_file_title }}/{{ artifactory_database_filename }} {{ artifactory_home }}/tomcat/lib"
   when: artifactory_database_jdbc_url is defined and not jdbc_installed.stat.exists
   notify:
     - restart artifactory
