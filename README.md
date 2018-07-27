@@ -25,10 +25,11 @@ Ansible 2.x
 |```artifactory_derby_tools_version```||10.12.1.1|
 |```artifactory_derby_tools_url```||"http://apache.mirror.anlx.net//db/derby/db-derby-{{ artifactory\_derby\_tools\_version }}/db-derby-{{ artifactory\_derby\_tools\_version }}-bin.zip"|
 |**MySQL**|||
-|```artifactory_database```||```artifactory_database_object_derby``` / ```artifactory_database_object```|
+|```artifactory_database```||See sections ```artifactory_database_object_derby``` and ```artifactory_database_object``` below.|
 |**JDBC Connector-J**|||
 |```artifactory_database_file_title```||mysql-connector-java-5.1.44|
 |```artifactory_database_jdbc_url```||"http://dev.mysql.com/get/Downloads/Connector-J/{{ artifactory\_database\_file\_title }}.tar.gz"|
+|```artifactory_database_filename```||```{{ artifactory_database_file_title }}.jar```|
 |**geerlingguy.mysql**|||
 |```mysql_innodb_file_per_table```||"1"|
 |```mysql_innodb_buffer_pool_size```||1536M|
@@ -42,13 +43,15 @@ Ansible 2.x
 |```artifactory_jmx_enable```||true|
 |```artifactory_jmx_java_options```||'export JAVA\_OPTIONS="$JAVA\_OPTIONS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.rmi.port=9011 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname={{ ansible_hostname }}"'|
 |```artifactory_jmx_jmxterm_install```||true|
-|```artifactory_jmx_jmxterm_url```||http://downloads.sourceforge.net/project/cyclops-group/jmxterm/1.0-alpha-4/jmxterm-1.0-alpha-4-uber.jar|
+|```artifactory_jmx_jmxterm_url```||https://downloads.sourceforge.net/project/cyclops-group/jmxterm/1.0.0/jmxterm-1.0.0-uber.jar|
 |**Encryption**|||
 |```artifactory_api_username```|Artifactory API username||
 |```artifactory_api_password```|Artifactory API password||
 |```artifactory_api_url```|Artifactory API URL||
 
 ## ```artifactory_database_object_derby```
+
+To configure a Derby database define the following variables for ```artifactory_database```: -
 
 |Variable|Description|Default|
 |---|---|:--|
@@ -57,6 +60,8 @@ Ansible 2.x
 |```driver```||org.apache.derby.jdbc.EmbeddedDriver|
 
 ## ```artifactory_database_object_mysql```
+
+To configure a MySQL database define the following variables for ```artifactory_database```: -
 
 |Variable|Description|Default|
 |---|---|:--|
