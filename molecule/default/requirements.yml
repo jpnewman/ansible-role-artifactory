@@ -1,0 +1,9 @@
+---
+- src: geerlingguy.firewall
+- src: geerlingguy.security
+- src: geerlingguy.mysql
+- src: jpnewman.common
+- src: jpnewman.java
+- src: jpnewman.locale-timezone
+- src: jpnewman.apache
+- src: jpnewman.artifactory

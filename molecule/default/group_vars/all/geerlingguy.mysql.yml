@@ -1,0 +1,13 @@
+---
+
+# mysql_root_username: root
+# mysql_root_password: password123
+
+mysql_innodb_file_per_table: "1"
+
+mysql_innodb_buffer_pool_size: 1536M
+mysql_tmp_table_size: 512M
+mysql_max_heap_table_size: 512M
+
+mysql_innodb_log_file_size: 256M
+mysql_innodb_log_buffer_size: 4M
