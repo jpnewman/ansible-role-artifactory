@@ -1,0 +1,11 @@
+---
+# Derby Database
+artifactory_database:
+  type: Derby  # Derby | MySQL | PostgreSQL
+  url: jdbc:derby:{db.home};create=true
+  driver: org.apache.derby.jdbc.EmbeddedDriver
+
+# SSL
+ssl_cert_local_directory: files/certs
+ssl_cert: notsecure.crt
+ssl_key: notsecure.key
