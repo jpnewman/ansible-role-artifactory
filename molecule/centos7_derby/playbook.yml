@@ -1,0 +1,21 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - debug:
+        msg: "Database Type: {{ artifactory_database.type | lower }}"
+
+  roles:
+    - { role: jpnewman.locale-timezone, tags: ["init"] }
+    - { role: jpnewman.common, tags: ["init"] }
+    - { role: jpnewman.java, tags: ["init"] }
+    - { role: geerlingguy.security, tags: ['security'] }
+    - { role: geerlingguy.firewall, tags: ['firewall'] }
+    - { role: geerlingguy.mysql, tags: ['mysql'],
+        when: artifactory_database.type | lower == 'mysql' }
+    - { role: ansible-role-artifactory, tags: ["artifactory"] }
+    - { role: jpnewman.apache, tags: ["apache"],
+        when: artifactory_proxy | lower == 'apache' }

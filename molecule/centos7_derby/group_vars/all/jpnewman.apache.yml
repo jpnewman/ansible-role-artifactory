@@ -1,0 +1,106 @@
+---
+apache_mods_enabled:
+  - proxy_http.load
+  - proxy_ajp.load
+  - rewrite.load
+  - deflate.load
+  - headers.load
+  - proxy_balancer.load
+  - proxy_connect.load
+  - proxy_html.load
+  - ssl.load
+  - lbmethod_byrequests.load
+  - slotmem_shm.load
+  - proxy.load
+  - xml2enc.load
+
+apache_delete_default_vhost: true
+apache_vhosts_file: "artifactory.conf"
+
+apache_virtualhosts:
+  - listening_ip: "*"
+    listening_port: 80
+    server_name: artifactory-server
+    server_alias: "*.artifactory-server"
+    document_root: /var/opt/jfrog/artifactory
+    extra_directives: |
+      LogLevel info
+      ErrorLog {{ apache_log_dir }}/artifactory-server-http-error.log
+      CustomLog {{ apache_log_dir }}/artifactory-server-http-access.log combined env=!dontlog
+
+      AllowEncodedSlashes On
+      RewriteEngine On
+
+      RewriteCond %{SERVER_PORT} (.*)
+      RewriteRule (.*) - [E=my_server_port:%1]
+      ##  NOTE: The 'REQUEST_SCHEME' Header is supported only from apache version 2.4 and above
+      RewriteCond %{REQUEST_SCHEME} (.*)
+      RewriteRule (.*) - [E=my_scheme:%1]
+
+      RewriteCond %{HTTP_HOST} (.*)
+      RewriteRule (.*) - [E=my_custom_host:%1]
+
+      RewriteRule ^/$                /artifactory/webapp/ [R,L]
+      RewriteRule ^/artifactory(/)?$      /artifactory/webapp/ [R,L]
+      RewriteRule ^/artifactory/webapp$   /artifactory/webapp/ [R,L]
+
+      RequestHeader set Host %{my_custom_host}e
+      RequestHeader set X-Forwarded-Port %{my_server_port}e
+      ## NOTE: {my_scheme} requires a module which is supported only from apache version 2.4 and above
+      RequestHeader set X-Forwarded-Proto %{my_scheme}e
+      RequestHeader set X-Artifactory-Override-Base-Url %{my_scheme}e://artifactory-server:%{my_server_port}e/artifactory
+      ProxyPassReverseCookiePath /artifactory /artifactory
+
+      ProxyRequests off
+      ProxyPreserveHost on
+      ProxyPass /artifactory/ ajp://localhost:8019/artifactory/
+      ProxyPassReverse /artifactory/ ajp://localhost:8019/artifactory/
+
+  - listening_ip: "*"
+    listening_port: 443
+    server_name: artifactory-server
+    server_alias: "*.artifactory-server"
+    document_root: /var/opt/jfrog/artifactory
+    SSLEngine: "On"
+    SSLCertificateFile: "{{ certificate_file }}"
+    SSLCertificateKeyFile: "{{ certificate_key_file }}"
+    _directories:
+      - _root: /var/opt/jfrog/artifactory
+        extra_directives: |
+          Require all granted
+    extra_directives: |
+      ProxyPreserveHost On
+
+      SSLProxyEngine on
+
+      ## Application specific logs
+      ErrorLog {{ apache_log_dir }}/artifactory-server-https-error.log
+      CustomLog {{ apache_log_dir }}/artifactory-server-https-access.log combined
+
+      AllowEncodedSlashes On
+      RewriteEngine on
+
+      RewriteCond %{SERVER_PORT} (.*)
+      RewriteRule (.*) - [E=my_server_port:%1]
+      ##  NOTE: The 'REQUEST_SCHEME' Header is supported only from apache version 2.4 and above
+      RewriteCond %{REQUEST_SCHEME} (.*)
+      RewriteRule (.*) - [E=my_scheme:%1]
+
+      RewriteCond %{HTTP_HOST} (.*)
+      RewriteRule (.*) - [E=my_custom_host:%1]
+
+      RewriteRule ^/$                /artifactory/webapp/ [R,L]
+      RewriteRule ^/artifactory(/)?$      /artifactory/webapp/ [R,L]
+      RewriteRule ^/artifactory/webapp$   /artifactory/webapp/ [R,L]
+
+      RequestHeader set Host %{my_custom_host}e
+      RequestHeader set X-Forwarded-Port %{my_server_port}e
+      ## NOTE: {my_scheme} requires a module which is supported only from apache version 2.4 and above
+      RequestHeader set X-Forwarded-Proto %{my_scheme}e
+      RequestHeader set X-Artifactory-Override-Base-Url %{my_scheme}e://artifactory-server:%{my_server_port}e/artifactory
+      ProxyPassReverseCookiePath /artifactory /artifactory
+
+      ProxyRequests off
+      ProxyPreserveHost on
+      ProxyPass /artifactory/ ajp://localhost:8019/artifactory/
+      ProxyPassReverse /artifactory/ ajp://localhost:8019/artifactory/
