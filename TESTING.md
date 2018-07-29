@@ -60,22 +60,24 @@ unbuffer molecule test | tee >(ansi2html > molecule.html)
 molecule --debug test --destroy=never
 ~~~
 
-### Specific Platform
+### Specific Scenario
 
 ~~~
-molecule test --platform=trusty64
-molecule test --platform=xenial64
-molecule test --platform=jessie64
-molecule test --platform=stretch64
+molecule test --scenario-name=xenial64_derby
+molecule test --scenario-name=centos7_derby
+~~~
+
+~~~
+unbuffer molecule test --scenario-name=xenial64_derby | tee >(ansi2html > xenial64_derby.html)
 ~~~
 
 ### Login
 
 ~~~
-molecule login --host ansible-role-java-trusty64
-molecule login --host ansible-role-java-xenial64
-molecule login --host ansible-role-java-jessie64
-molecule login --host ansible-role-java-stretch64
+molecule login --host ansible-role-artifactory-trusty64
+molecule login --host ansible-role-artifactory-xenial64
+molecule login --host ansible-role-artifactory-jessie64
+molecule login --host ansible-role-artifactory-stretch64
 ~~~
 
 ## Destroy, All Platforms

@@ -14,14 +14,14 @@ Ansible 2.x
 |Variable|Description|Default|
 |---|---|:--|
 |**defaults jpnewman.artifactory**|||
-|```artifactory_type```|oss|pro / oss|
+|```artifactory_type```|```oss``` or ```pro```|```oss```|
 |```artifactory_home```||/var/opt/jfrog/artifactory|
 |```artifactory_default_file```||/etc/opt/jfrog/artifactory/default|
 |```artifactory_license_file```|||
 |```artifactory_license_path```||"/etc/opt/jfrog/artifactory/artifactory.lic"|
 |```artifactory_service_name```||artifactory|
 |**Derby Database / Derby Tools**|||
-|```artifactory_derby_tools_install```||False|
+|```artifactory_derby_tools_install```||false|
 |```artifactory_derby_tools_version```||10.12.1.1|
 |```artifactory_derby_tools_url```||"http://apache.mirror.anlx.net//db/derby/db-derby-{{ artifactory\_derby\_tools\_version }}/db-derby-{{ artifactory\_derby\_tools\_version }}-bin.zip"|
 |**MySQL**|||
@@ -48,6 +48,7 @@ Ansible 2.x
 |```artifactory_api_username```|Artifactory API username||
 |```artifactory_api_password```|Artifactory API password||
 |```artifactory_api_url```|Artifactory API URL||
+|```change_existing_artifactory_db_properties```|Change Existing Artifactory db.properties|true|
 
 ## ```artifactory_database_object_derby```
 
