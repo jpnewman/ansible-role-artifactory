@@ -6,6 +6,9 @@ ansible.cfg
 
 files/artifactory.lic
 
+# Reports
+*.html
+
 # VSCode
 .vscode/*
 !.vscode/settings.json
