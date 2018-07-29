@@ -14,10 +14,10 @@ artifactory_license_path: "/etc/opt/jfrog/artifactory/artifactory.lic"
 artifactory_service_name: artifactory
 
 # Derby Database
-artifactory_database:
-  type: Derby  # Derby | MySQL | PostgreSQL
-  url: jdbc:derby:{db.home};create=true
-  driver: org.apache.derby.jdbc.EmbeddedDriver
+# artifactory_database:
+#   type: Derby  # Derby | MySQL | PostgreSQL
+#   url: jdbc:derby:{db.home};create=true
+#   driver: org.apache.derby.jdbc.EmbeddedDriver
 
 # Derby Tools
 artifactory_derby_tools_install: false
@@ -25,15 +25,14 @@ artifactory_derby_tools_version: 10.12.1.1
 artifactory_derby_tools_url: "http://apache.mirror.anlx.net//db/derby/db-derby-{{ artifactory_derby_tools_version }}/db-derby-{{ artifactory_derby_tools_version }}-bin.zip"
 
 # MySQL Database
-# artifactory_database:
-#   # config_file: "{{ artifactory_home }}/misc/db/mysql.properties"
-#   type: mysql
-#   host: localhost
-#   driver: com.mysql.jdbc.Driver
-#   url: 'jdbc:mysql://{{ artifactory_database.host }}:3306/{{ artifactory_database.database }}?characterEncoding=UTF-8&elideSetAutoCommits=true'
-#   username: artifactory
-#   password: password
-#   database: artdb
+artifactory_database:
+  type: mysql
+  host: localhost
+  driver: com.mysql.jdbc.Driver
+  url: 'jdbc:mysql://localhost:3306/artdb?characterEncoding=UTF-8&elideSetAutoCommits=true'
+  username: artifactory
+  password: password
+  database: artdb
 
 # JDBC Connector-J
 # http://dev.mysql.com/downloads/connector/j/
@@ -68,3 +67,6 @@ artifactory_jmx_jmxterm_download_timeout: 60
 # artifactory_api_username: admin
 # artifactory_api_password: password
 # artifactory_api_url: http://localhost/artifactory/api
+
+# Change Encrypted Files
+change_existing_artifactory_db_properties: true

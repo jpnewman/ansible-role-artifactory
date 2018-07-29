@@ -11,10 +11,14 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - all
+    - name: EL
+      versions:
+        - 7
   galaxy_tags:
     - artifactory
 
 dependencies:
-  - geerlingguy.mysql
+  - { role: geerlingguy.mysql,
+      when: artifactory_database.type | lower == 'mysql' }
   - jpnewman.java
   - jpnewman.apache

@@ -1,11 +1,9 @@
 ---
-
-- name: Check Artifactory Database
-  command: >
-    /usr/bin/mysql -u{{ mysql_root_username }} -p{{ mysql_root_password }} -s -r -e "SHOW DATABASES LIKE '{{ artifactory_database.database }}';"
-  register: databases
-  check_mode: false
-  changed_when: false
+- name: extra modules for mysql
+  apt: name={{item}} state=present
+  with_items:
+    - python-mysqldb
+    - mysql-client
 
 - name: Create Artifactory Database Table
   mysql_db:
@@ -13,29 +11,37 @@
     encoding: "utf8"
     collation: "utf8_bin"
     state: present
-  when: artifactory_database.database not in databases.stdout
+    login_host: "{{ artifactory_database.host }}"
+    login_user: "{{ mysql_root_username }}"
+    login_password: "{{ mysql_root_password }}"
 
 - name: Create Artifactory Database User
   mysql_user:
     name: "{{ artifactory_database.username }}"
     password: "{{ artifactory_database.password }}"
-    host: "localhost"
+    host: "%"
     priv: "{{ artifactory_database.database }}.*:ALL,GRANT"
+    login_host: "{{ artifactory_database.host }}"
+    login_user: "{{ mysql_root_username }}"
+    login_password: "{{ mysql_root_password }}"
 
 - name: Stat Artifactory DB properties files
   stat:
     path: "{{ artifactory_home }}/etc/db.properties"
   register: artifactory_db_properties
 
-# Artifactory encrypts passwords in config files so use the API to decrypt them.
+# Artifactory encrypts passwords in config files so using the API to decrypt them.
+# Otherwise, task "Configure Artifactory Database Storage" will always change.
 - name: Check Artifactory API Health
   uri:
     url: "{{ artifactory_api_url }}/system/ping"
+    user: "{{ artifactory_api_username }}"
+    password: "{{ artifactory_api_password }}"
     return_content: true
   register: artifactory_api_ping
-  when: artifactory_api_url is defined
   check_mode: false
   ignore_errors: true
+  when: artifactory_api_username is defined and artifactory_api_password is defined and artifactory_api_url is defined
 
 - name: Decrypt Artifactory via API
   uri:
@@ -43,7 +49,12 @@
     method: POST
     user: "{{ artifactory_api_username }}"
     password: "{{ artifactory_api_password }}"
-  when: artifactory_api_username is defined and artifactory_api_password is defined and artifactory_api_ping.content == 'OK' and artifactory_db_properties.stat.exists
+  when: artifactory_api_username is defined and artifactory_api_password is defined and artifactory_api_ping.content is defined and artifactory_api_ping.content == 'OK' and artifactory_db_properties.stat.exists and change_existing_artifactory_db_properties
+
+- name: Pause for Decryption
+  pause:
+    seconds: 20
+  when: artifactory_api_ping.content is defined and artifactory_api_ping.content == 'OK' and artifactory_db_properties.stat.exists and change_existing_artifactory_db_properties
 
 - name: Configure Artifactory Database Storage
   template:
@@ -55,6 +66,7 @@
   notify:
     - restart artifactory
     - restart apache
+  when: artifactory_db_properties.stat.exists == false or change_existing_artifactory_db_properties
 
 - name: Encrypt Artifactory via API
   uri:
@@ -62,4 +74,4 @@
     method: POST
     user: "{{ artifactory_api_username }}"
     password: "{{ artifactory_api_password }}"
-  when: artifactory_api_username is defined and artifactory_api_password is defined and artifactory_api_ping.content == 'OK'
+  when: artifactory_api_username is defined and artifactory_api_password is defined and artifactory_api_ping.content is defined and artifactory_api_ping.content == 'OK' and change_existing_artifactory_db_properties
