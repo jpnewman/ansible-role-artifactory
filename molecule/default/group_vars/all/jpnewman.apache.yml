@@ -1,5 +1,4 @@
 ---
-
 apache_mods_enabled:
   - proxy_http.load
   - proxy_ajp.load
