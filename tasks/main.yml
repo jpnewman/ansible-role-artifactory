@@ -26,6 +26,17 @@
 - include: databases/mysql.yml
   when: artifactory_database.type | lower == 'mysql'
 
+# Defaults
+- name: Updated Artifactory Defaults
+  replace:
+    path: "{{ artifactory_default_file }}"
+    regexp: '(-{{ item.key }})[^\s]*'
+    replace: '\g<1>{{ item.value }}'
+  with_dict: "{{ artifactory_defaults }}"
+  notify:
+    - restart artifactory
+    - restart apache
+
 # artifactory_jmx_enable
 - name: Artifactory JMX Enable
   lineinfile:

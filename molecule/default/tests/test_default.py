@@ -54,6 +54,12 @@ def test_artifactory_is_up(host):
     assert 'artifactory' in html
 
 
+def test_default_settings(host):
+    artifactory_defaults = host.file('/etc/opt/jfrog/artifactory/default')
+    assert artifactory_defaults.contains('-Xms512m')
+    assert artifactory_defaults.contains('-Xmx2g')
+
+
 def test_jmx_settings(host):
     artifactory_defaults = host.file('/etc/opt/jfrog/artifactory/default')
     assert artifactory_defaults.contains('export JAVA_OPTIONS="$JAVA_OPTIONS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.rmi.port=9011 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=')

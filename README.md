@@ -20,6 +20,8 @@ Ansible 2.x
 |```artifactory_license_file```|||
 |```artifactory_license_path```||"/etc/opt/jfrog/artifactory/artifactory.lic"|
 |```artifactory_service_name```||artifactory|
+|**Defaults**|||
+|```artifactory_defaults```||A dictionary of defaults. See section ```artifactory_defaults``` below.|
 |**Derby Database / Derby Tools**|||
 |```artifactory_derby_tools_install```||false|
 |```artifactory_derby_tools_version```||10.12.1.1|
@@ -49,6 +51,19 @@ Ansible 2.x
 |```artifactory_api_password```|Artifactory API password||
 |```artifactory_api_url```|Artifactory API URL||
 |```change_existing_artifactory_db_properties```|Change Existing Artifactory db.properties|true|
+
+
+## ```artifactory_defaults```
+
+Configure Artifactory defaults via a dictionary under ```artifactory_defaults``` where the key is the option: -
+
+*e.g.*
+
+~~~
+artifactory_defaults:
+  Xms: 4g
+  Xmx: 8g
+~~~
 
 ## ```artifactory_database_object_derby```
 

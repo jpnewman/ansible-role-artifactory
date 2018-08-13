@@ -13,6 +13,11 @@ artifactory_license_path: "/etc/opt/jfrog/artifactory/artifactory.lic"
 
 artifactory_service_name: artifactory
 
+# Defaults
+artifactory_defaults:
+  Xms: 512m
+  Xmx: 2g
+
 # Derby Database
 # artifactory_database:
 #   type: Derby  # Derby | MySQL | PostgreSQL
