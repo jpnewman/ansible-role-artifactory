@@ -3,7 +3,7 @@
 [![Ansible Role](https://img.shields.io/ansible/role/12824.svg?maxAge=2592000)](https://galaxy.ansible.com/jpnewman/artifactory/)
 [![Build Status](https://travis-ci.org/jpnewman/ansible-role-artifactory.svg?branch=master)](https://travis-ci.org/jpnewman/ansible-role-artifactory)
 
-This is an Ansible role to install artifactory.
+This is an Ansible role to install artifactory or Jfrog Container Registry (based on artifactory).
 
 ## Requirements
 
@@ -14,7 +14,7 @@ Ansible 2.x
 |Variable|Description|Default|
 |---|---|:--|
 |**defaults jpnewman.artifactory**|||
-|```artifactory_type```|oss|pro / oss|
+|```artifactory_type```|oss|pro / oss|jcr|
 |```artifactory_home```||/var/opt/jfrog/artifactory|
 |```artifactory_default_file```||/etc/opt/jfrog/artifactory/default|
 |```artifactory_license_file```|||

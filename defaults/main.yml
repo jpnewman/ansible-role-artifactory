@@ -2,7 +2,7 @@
 # defaults file for jpnewman.artifactory
 
 # artifactory_version: 4.13.0 # lastest | <Version_Number>
-artifactory_type: oss # pro | oss
+artifactory_type: oss # pro | oss | jcr
 
 artifactory_home: /var/opt/jfrog/artifactory # /opt/jfrog/artifactory
 

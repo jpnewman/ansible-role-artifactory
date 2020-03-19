@@ -14,6 +14,14 @@
     baseurl: https://jfrog.bintray.com/artifactory-rpms
   when: artifactory_type | lower == 'oss'
 
+- name: Add Jfrog Container Registry RPM
+  yum_repository:
+    name: container-registry-rpms
+    description: JFrog Container Registry
+    baseurl: https://bintray.com/jfrog/artifactory-rpms/jfrog-artifactory-jcr-rpm
+  when: artifactory_type | lower == 'jcr'
+
+  
 - name: Install Artifactory
   yum:
     name: "jfrog-artifactory-{{ artifactory_type | lower }}"
